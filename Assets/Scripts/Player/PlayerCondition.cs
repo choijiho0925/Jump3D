@@ -3,18 +3,9 @@ using UnityEngine;
 public class PlayerCondition : MonoBehaviour
 {
     public UICondition uiCondition;
-    public GameObject gameOverUI;
 
     Condition health { get { return uiCondition.health; } }
     Condition stamina {  get { return uiCondition.stamina; } }
-
-    private void Start()
-    {
-        if (gameOverUI == null)
-        {
-            
-        }
-    }
 
     void Update()
     {
@@ -23,14 +14,7 @@ public class PlayerCondition : MonoBehaviour
 
         if(health.currentValue <= 0f)
         {
-            Die();
+            GameManager.Instance.Die();
         }
-    }
-
-    private void Die()
-    {
-        Time.timeScale = 0f;
-        Cursor.lockState = CursorLockMode.None;
-        gameOverUI.SetActive(true);
     }
 }

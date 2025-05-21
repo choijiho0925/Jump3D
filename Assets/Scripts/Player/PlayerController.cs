@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     public Transform cameraContainer;
 
     [HideInInspector]
-    private bool canLook = true;
+    public bool canLook = true;
 
     private Rigidbody rb;
 
@@ -32,12 +32,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-
-    private void Update()
-    {
-        Debug.Log(IsGrounded());
+        Cursor.lockState = CursorLockMode.Locked; // 마우스 잠금
     }
 
     private void FixedUpdate()
