@@ -506,7 +506,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   currentInteractGameObject: {fileID: 0}
-  promptText: {fileID: 0}
+  promptText: {fileID: 678755650}
 --- !u!1 &397656958
 GameObject:
   m_ObjectHideFlags: 0

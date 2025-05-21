@@ -18,7 +18,10 @@ public class Interaction : MonoBehaviour
     private void Start()
     {
         camera = Camera.main;
-        promptText = UIManager.Instance.promptText;
+        if (promptText == null)
+        {
+            promptText = UIManager.Instance.promptText;
+        }
     }
 
     private void Update()
