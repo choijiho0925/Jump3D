@@ -2,20 +2,20 @@ using UnityEngine;
 
 public class CharacterManager : MonoBehaviour
 {
-    private static CharacterManager _instance;
-    public static CharacterManager Instance 
+    private static CharacterManager _instance; // ½Ì±ÛÅæ
+    public static CharacterManager Instance  // ÇÁ·ÎÆÛÆ¼·Î Ä¸½¶È­
     {  
         get
         { 
             if (_instance == null) 
             { 
-                _instance = new GameObject("CharacterManager").GetComponent<CharacterManager>();
+                _instance = new GameObject("CharacterManager").AddComponent<CharacterManager>();
             }
             return _instance; 
         } 
     }
 
-    private Player _player;
+    private Player _player; // ÇÁ·ÎÆÛÆ¼·Î Ä¸½¶È­
     public Player Player
     {
         get { return _player; }
