@@ -46,12 +46,6 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 0.0f;
         }
-
-    }
-
-    private void Update()
-    {
-        Debug.Log(isPlaying);
     }
 
     public void Die()
