@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed; // 이동속도
     public float jumpForce; // 점프 힘
+    public float runSpeed; // 달리기 속도
     public LayerMask groundLayerMask; // 땅
 
+    private bool isRunning;
     private Vector2 movementInput; // 움직임 방향
 
     [Header("Look")]
@@ -30,14 +33,22 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    private void Update()
+    {
+        Run();
+    }
+
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked; // 마우스 잠금
+        Cursor.lockState = CursorLockMode.Locked; // 마우스 잠금        
     }
 
     private void FixedUpdate()
     {
-        Move();
+        if (IsGrounded()) 
+        {
+            Move();
+        }
     }
 
     private void LateUpdate()
@@ -65,6 +76,8 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started && IsGrounded())
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // y축 * 점프힘, 힘 주는 방식(갑자기 펑 터뜨릴때 자주 씀) 
+
+            CharacterManager.Instance.Player.condition.uiCondition.stamina.Subtract(20); // 점프할 때 스태미나 10 감소
         }
     }
     
@@ -73,9 +86,25 @@ public class PlayerController : MonoBehaviour
         mouseDelta = context.ReadValue<Vector2>(); // InputAction에서 마우스의 Vector2 읽어서 불러오기(y축은 상하, x축은 좌우)
     }
 
+    public void OnRunInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            isRunning = true;
+        }
+        //else if (context.phase == InputActionPhase.Performed)
+        //{
+
+        //}
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            isRunning = false;
+        }
+    }
+
     private void Move()
     {
-        Vector3 velocity = (transform.forward * movementInput.y + transform.right * movementInput.x) * moveSpeed; // 속도계산식 : 이동방향(y축은 앞뒤, x축은 좌우) * 속도
+        Vector3 velocity = (transform.forward * movementInput.y + transform.right * movementInput.x) * (isRunning ? runSpeed : moveSpeed); // 속도계산식 : 이동방향(y축은 앞뒤, x축은 좌우) * 속도
         velocity.y = rb.velocity.y; // 점프 혹은 중력에 영향을 받지 않음
         rb.velocity = velocity; // 최종 적용
     }
@@ -87,6 +116,25 @@ public class PlayerController : MonoBehaviour
 
         cameraContainer.localEulerAngles = new Vector3(-currentCameraPov, 0, 0); // 상하로 회전, -currentCameraPov에 -를 붙이는 이유는 마우스 y축을 위로 할때 아래로 향하게 할려고, Rotation X는 상하로 이동
         transform.eulerAngles += new Vector3(0, mouseDelta.x * cameraSensitivity, 0); // 좌우 회전값, (x값 * 민감도) Rotation Y는 좌우로 이동
+    }
+
+    private void Run()
+    {
+        var stamina = CharacterManager.Instance.Player.condition.uiCondition.stamina;
+
+        // 스태미나 소비 중
+        if (isRunning && movementInput != Vector2.zero && IsGrounded())
+        {
+            if (stamina.currentValue > 0)
+            {
+                stamina.Subtract(10f * Time.deltaTime);
+                CharacterManager.Instance.Player.condition.lastStaminaUseTime = Time.time; // 최근 사용 시간 업데이트
+            }
+            else
+            {
+                isRunning = false;
+            }
+        }
     }
 
     private bool IsGrounded()
