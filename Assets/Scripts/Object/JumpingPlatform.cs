@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using UnityEngine;
 
 public class JumpingPlatform : MonoBehaviour

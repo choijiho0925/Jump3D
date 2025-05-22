@@ -31,10 +31,18 @@ public class CharacterManager : MonoBehaviour
         }
         else
         {
-            if(_instance == this)
+            if(_instance != this)
             {
                 Destroy(gameObject);
             }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (_instance == this)
+        {
+            _instance = null;
         }
     }
 }

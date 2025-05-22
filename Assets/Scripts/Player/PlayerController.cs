@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerController : MonoBehaviour
 {
@@ -33,11 +32,6 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    private void Update()
-    {
-        Run();
-    }
-
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked; // 마우스 잠금        
@@ -47,7 +41,8 @@ public class PlayerController : MonoBehaviour
     {
         if (IsGrounded()) 
         {
-            Move();
+            Move(); 
+            Run();
         }
     }
 
@@ -92,10 +87,6 @@ public class PlayerController : MonoBehaviour
         {
             isRunning = true;
         }
-        //else if (context.phase == InputActionPhase.Performed)
-        //{
-
-        //}
         else if (context.phase == InputActionPhase.Canceled)
         {
             isRunning = false;
