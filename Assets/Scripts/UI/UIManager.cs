@@ -17,12 +17,9 @@ public class UIManager : MonoBehaviour
         {
             _instance = this;
         }
-        else
+        else if (_instance != this)
         {
-            if (_instance != this)
-            {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
     }
 
@@ -35,7 +32,7 @@ public class UIManager : MonoBehaviour
 
         if (gameOverUI == null)
         {
-            gameOverUI = GameObject.Find("GameOver");
+            gameOverUI = GameObject.Find("GameOverUI");
         }
 
         if (promptText == null)

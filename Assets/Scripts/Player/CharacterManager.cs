@@ -29,12 +29,9 @@ public class CharacterManager : MonoBehaviour
             _instance=this;
             DontDestroyOnLoad(gameObject);
         }
-        else
+        else if (_instance != this)
         {
-            if(_instance != this)
-            {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
     }
 
