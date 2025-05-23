@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector]
     public bool canLook = true;
+    public Action inventory;
 
     private Rigidbody rb;
 
@@ -93,6 +95,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnInventory(InputAction.CallbackContext context)
+    {
+        if (GameManager.Instance.isPlaying)
+        {
+            if (context.phase == InputActionPhase.Started)
+            {
+                inventory?.Invoke();
+                ToggleCursor();
+            }
+        }
+    }
+
     private void Move()
     {
         Vector3 velocity = (transform.forward * movementInput.y + transform.right * movementInput.x) * (isRunning ? runSpeed : moveSpeed); // 속도계산식 : 이동방향(y축은 앞뒤, x축은 좌우) * 속도
@@ -146,5 +160,12 @@ public class PlayerController : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void ToggleCursor()
+    {
+        bool toggle = Cursor.lockState == CursorLockMode.Locked;
+        Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
+        canLook = !toggle;
     }
 }

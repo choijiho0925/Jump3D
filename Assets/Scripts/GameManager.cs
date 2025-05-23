@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private bool isPlaying;
+    public bool isPlaying;
 
     private static GameManager _instance; // ½Ì±ÛÅæ
     public static GameManager Instance  // ÇÁ·ÎÆÛÆ¼·Î Ä¸½¶È­

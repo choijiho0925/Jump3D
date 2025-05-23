@@ -14,9 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: "\uC0AC\uC774\uB2E4"
   description: "\uB9E5\uB3C4\uB0A0\uB4DC \uB4DC\uB77C\uC774\uBE0C \uC2A4\uB8E8\uC5D0\uC11C
-    \uBC1B\uC544\uC628 \uC0AC\uC774\uB2E4\uC774\uB2E4."
+    \uBC1B\uC544\uC628 \uC0AC\uC774\uB2E4\uC774\uB2E4. \uC774\uAC78 \uB9C8\uC2E0\uB2E4\uBA74
+    \uD558\uB298\uB85C \uB0A0\uC544\uAC08 \uAC83 \uAC19\uB2E4."
   type: 1
   icon: {fileID: 21300000, guid: ee61f5f3403215b4585df931a6adab4f, type: 3}
-  DropPrefab: {fileID: 4219197483499104715, guid: 498d964ec6adc894f98e982dfca5b953, type: 3}
+  dropPrefab: {fileID: 4219197483499104715, guid: 498d964ec6adc894f98e982dfca5b953, type: 3}
   canStack: 1
   maxStackCount: 60
+  consumables:
+  - type: 2
+    value: 10
+  equipPrefab: {fileID: 0}

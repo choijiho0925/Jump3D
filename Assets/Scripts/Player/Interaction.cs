@@ -64,7 +64,7 @@ public class Interaction : MonoBehaviour
             currentInteractable.OnInteract();
             currentInteractGameObject = null ;
             currentInteractable = null;
-            promptText.gameObject.SetActive(false );
+            promptText.gameObject.SetActive(false);
         }
     }
 }

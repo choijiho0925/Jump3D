@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum ItemType
@@ -9,12 +10,29 @@ public enum ItemType
 public enum ConsumableType
 {
     Health,
-    Stamina
+    Stamina,
+    JumpForce
 }
+
+public enum EquipableType
+{
+    Speed,
+    Gravity
+}
+
+[Serializable]
 
 public class ItemDataConsumable
 {
     public ConsumableType type;
+    public float value;
+}
+
+[Serializable]
+
+public class ItemDataEquip
+{
+    public EquipableType type;
     public float value;
 }
 
@@ -26,7 +44,7 @@ public class ItemData : ScriptableObject
     public string description;
     public  ItemType type;
     public Sprite icon;
-    public GameObject DropPrefab;
+    public GameObject dropPrefab;
 
     [Header("Stacking")]
     public bool canStack;
@@ -34,4 +52,8 @@ public class ItemData : ScriptableObject
 
     [Header("Consumable")]
     public ItemDataConsumable[] consumables;
+
+    [Header("Equip")]
+    public GameObject equipPrefab;
+    public ItemDataEquip[] equipables;
 }
