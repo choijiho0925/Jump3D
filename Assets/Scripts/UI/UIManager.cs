@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI promptText;
     public GameObject restartButton;
     public GameObject exitGameButton;
+    public UIInventory InventoryUI;
 
     private static UIManager _instance; // ½Ì±ÛÅæ
     public static UIManager Instance { get { return _instance; } } //Ä¸½¶È­

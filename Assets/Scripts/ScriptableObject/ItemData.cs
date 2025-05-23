@@ -11,13 +11,13 @@ public enum ConsumableType
 {
     Health,
     Stamina,
-    JumpForce
+    Jump
 }
 
 public enum EquipableType
 {
     Speed,
-    Gravity
+    Mass
 }
 
 [Serializable]

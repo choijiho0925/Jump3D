@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
 {
     public PlayerController controller;
     public PlayerCondition condition;
+    public Equipment equipment;
 
     public ItemData itemData;
     public Action addItem;
@@ -22,6 +23,11 @@ public class Player : MonoBehaviour
         if (condition == null)
         {
             condition = GetComponent<PlayerCondition>(); // 방어코드
+        }
+
+        if (equipment == null)
+        {
+            equipment = GetComponent<Equipment>();
         }
     }
 }

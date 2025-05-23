@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     public bool canLook = true;
     public Action inventory;
 
-    private Rigidbody rb;
+    public Rigidbody rb;
 
     private void Awake()
     {

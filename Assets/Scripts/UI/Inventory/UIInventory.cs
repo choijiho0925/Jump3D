@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -22,14 +20,12 @@ public class UIInventory : MonoBehaviour
     public GameObject unequipButton;
     public GameObject dropButton;
 
+    private ItemData selectedItem;
+    public int selectedItemIndex = 0;
     private int curEquipIndex;
-    private int selectedItemIndex;
-    private ItemSlot selectedItem;
 
     private PlayerController controller;
     private PlayerCondition condition;
-
-
 
     private void Start()
     {
@@ -163,41 +159,47 @@ public class UIInventory : MonoBehaviour
     {
         if (slots[index].item == null) return;
 
-        selectedItem = slots[index]; 
+        selectedItem = slots[index].item; 
         selectedItemIndex = index;
 
-        selectedItemName.text = selectedItem.item.displayName;
-        selectedItemDescription.text = selectedItem.item.description;
+        selectedItemName.text = selectedItem.displayName;
+        selectedItemDescription.text = selectedItem.description;
 
         selectedItemStatName.text = string.Empty;
         selectedItemStatValue.text = string.Empty;
 
-        for (int i = 0; i < selectedItem.item.consumables.Length; i++)
+        for (int i = 0; i < selectedItem.consumables.Length; i++)
         {
-            selectedItemStatName.text += selectedItem.item.consumables[i].type.ToString() + "\n";
-            selectedItemStatValue.text += selectedItem.item.consumables[i].value.ToString() + "\n";
+            selectedItemStatName.text += selectedItem.consumables[i].type.ToString() + "\n";
+            selectedItemStatValue.text += selectedItem.consumables[i].value.ToString() + "\n";
         }
 
-        useButton.SetActive(selectedItem.item.type == ItemType.Consumable);
-        equipButton.SetActive(selectedItem.item.type == ItemType.Equipable && !selectedItem.equipped);
-        unequipButton.SetActive(selectedItem.item.type == ItemType.Equipable && selectedItem.equipped);
+        for (int i = 0; i < selectedItem.equipables.Length; i++)
+        {
+            selectedItemStatName.text += selectedItem.equipables[i].type.ToString() + "\n";
+            selectedItemStatValue.text += selectedItem.equipables[i].value.ToString() + "\n";
+        }
+
+        useButton.SetActive(selectedItem.type == ItemType.Consumable);
+        equipButton.SetActive(selectedItem.type == ItemType.Equipable && !slots[index].equipped);
+        unequipButton.SetActive(selectedItem.type == ItemType.Equipable && slots[index].equipped);
         dropButton.SetActive(true);
     }
 
     public void OnUseButton()
     {
-        if (selectedItem.item.type == ItemType.Consumable)
+        if (selectedItem.type == ItemType.Consumable)
         {
-            for (int i = 0; i < selectedItem.item.consumables.Length; i++)
+            for (int i = 0; i < selectedItem.consumables.Length; i++)
             {
-                switch (selectedItem.item.consumables[i].type)
+                switch (selectedItem.consumables[i].type)
                 {
                     case ConsumableType.Health:
-                        condition.Heal(selectedItem.item.consumables[i].value); break;
+                        condition.Heal(selectedItem.consumables[i].value); break;
                     case ConsumableType.Stamina:
-                        condition.GrowUpStaminaMaxValue(selectedItem.item.consumables[i].value); break;
-                    case ConsumableType.JumpForce:
-                        condition.JumpForceUp(selectedItem.item.consumables[i].value); break;
+                        condition.GrowUpStaminaMaxValue(selectedItem.consumables[i].value); break;
+                    case ConsumableType.Jump:
+                        condition.JumpForceUp(selectedItem.consumables[i].value); break;
                 }
             }
             RemoveSelctedItem();
@@ -206,30 +208,75 @@ public class UIInventory : MonoBehaviour
 
     public void OnDropButton()
     {
-        ThrowItem(selectedItem.item);
+        ThrowItem(selectedItem);
         RemoveSelctedItem();
     }
 
-    void RemoveSelctedItem()
+    private void RemoveSelctedItem()
     {
-        selectedItem.quantity--;
+        slots[selectedItemIndex].quantity--;
 
-        if (selectedItem.quantity <= 0)
+        if (slots[selectedItemIndex].quantity <= 0)
         {
-            if (slots[selectedItemIndex].equipped)
-            {
-                //UnEquip(selectedItemIndex);
-            }
-
-            selectedItem.item = null;
+            selectedItem = null;
+            slots[selectedItemIndex].item = null;
+            selectedItemIndex = -1;
             ClearSelectedItemInfo();
         }
 
         UpdateUI();
     }
 
-    public bool HasItem(ItemData item, int quantity)
+    public void OnEquipButton()
     {
-        return false;
+        if (slots[curEquipIndex].equipped)
+        {
+            UnEquip(curEquipIndex);
+        }
+
+        slots[selectedItemIndex].equipped = true;
+        CheckEquiable();
+        curEquipIndex = selectedItemIndex;
+        CharacterManager.Instance.Player.equipment.EquipNew(selectedItem);
+        UpdateUI();
+
+        SelectItem(selectedItemIndex);
+    }
+
+    private void UnEquip(int index)
+    {
+        slots[index].equipped = false;
+        CheckEquiable();
+        CharacterManager.Instance.Player.equipment.UnEquip();
+        UpdateUI();
+
+        if (selectedItemIndex == index)
+        {
+            SelectItem(selectedItemIndex);
+        }
+    }
+
+    public void OnUnEquipButton()
+    {
+        UnEquip(selectedItemIndex);
+    }
+
+    private void CheckEquiable()
+    {
+        if (selectedItem.type == ItemType.Equipable)
+        {
+            for (int i = 0; i < selectedItem.equipables.Length; i++)
+            {
+                switch (selectedItem.equipables[i].type)
+                {
+                    case EquipableType.Speed:
+                        condition.EquipKnife(selectedItem.equipables[i].value);
+                        break;
+                    case EquipableType.Mass:
+                        condition.EquipHammer(selectedItem.equipables[i].value);
+                        break;
+                }
+            }
+        }
     }
 }
