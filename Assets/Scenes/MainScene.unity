@@ -5047,7 +5047,7 @@ MonoBehaviour:
   promptText: {fileID: 678755650}
   restartButton: {fileID: 1091032826}
   exitGameButton: {fileID: 604687357}
-  InventoryUI: {fileID: 1160861949}
+  InventoryUI: {fileID: 1160861954}
 --- !u!4 &1476541394 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1207449177372256145, guid: 46ca9bca5d4d6824c9973375d741a3df, type: 3}

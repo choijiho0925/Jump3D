@@ -188,22 +188,7 @@ public class UIInventory : MonoBehaviour
 
     public void OnUseButton()
     {
-        if (selectedItem.type == ItemType.Consumable)
-        {
-            for (int i = 0; i < selectedItem.consumables.Length; i++)
-            {
-                switch (selectedItem.consumables[i].type)
-                {
-                    case ConsumableType.Health:
-                        condition.Heal(selectedItem.consumables[i].value); break;
-                    case ConsumableType.Stamina:
-                        condition.GrowUpStaminaMaxValue(selectedItem.consumables[i].value); break;
-                    case ConsumableType.Jump:
-                        condition.JumpForceUp(selectedItem.consumables[i].value); break;
-                }
-            }
-            RemoveSelctedItem();
-        }
+        CheckItem();
     }
 
     public void OnDropButton()
@@ -235,7 +220,7 @@ public class UIInventory : MonoBehaviour
         }
 
         slots[selectedItemIndex].equipped = true;
-        CheckEquiable();
+        CheckItem();
         curEquipIndex = selectedItemIndex;
         CharacterManager.Instance.Player.equipment.EquipNew(selectedItem);
         UpdateUI();
@@ -246,7 +231,7 @@ public class UIInventory : MonoBehaviour
     private void UnEquip(int index)
     {
         slots[index].equipped = false;
-        CheckEquiable();
+        CheckItem();
         CharacterManager.Instance.Player.equipment.UnEquip();
         UpdateUI();
 
@@ -261,7 +246,7 @@ public class UIInventory : MonoBehaviour
         UnEquip(selectedItemIndex);
     }
 
-    private void CheckEquiable()
+    private void CheckItem()
     {
         if (selectedItem.type == ItemType.Equipable)
         {
@@ -277,6 +262,25 @@ public class UIInventory : MonoBehaviour
                         break;
                 }
             }
+        }
+        else if(selectedItem.type == ItemType.Consumable)
+        {
+            for (int i = 0; i < selectedItem.consumables.Length; i++)
+            {
+                switch (selectedItem.consumables[i].type)
+                {
+                    case ConsumableType.Health:
+                        condition.Heal(selectedItem.consumables[i].value); 
+                        break;
+                    case ConsumableType.Stamina:
+                        condition.GrowUpStaminaMaxValue(selectedItem.consumables[i].value); 
+                        break;
+                    case ConsumableType.Jump:
+                        condition.JumpForceUp(selectedItem.consumables[i].value); 
+                        break;
+                }
+            }
+            RemoveSelctedItem();
         }
     }
 }

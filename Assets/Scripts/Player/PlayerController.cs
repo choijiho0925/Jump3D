@@ -41,11 +41,9 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (IsGrounded()) 
-        {
-            Move(); 
-            Run();
-        }
+        Move();
+        Run();
+
     }
 
     private void LateUpdate()
@@ -127,8 +125,7 @@ public class PlayerController : MonoBehaviour
     {
         var stamina = CharacterManager.Instance.Player.condition.uiCondition.stamina;
 
-        // 스태미나 소비 중
-        if (isRunning && movementInput != Vector2.zero && IsGrounded())
+        if (isRunning && movementInput != Vector2.zero) // 스태미나 소비 중
         {
             if (stamina.currentValue > 0)
             {
